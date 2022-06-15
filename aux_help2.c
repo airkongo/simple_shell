@@ -4,45 +4,37 @@
  * aux_help - Help information for the builtin help.
  * Return: no return
  */
-int __help(struct info *info)
+void aux_help(void)
 {
-	const builtin_t *bp = NULL;
-	char * const *args = info->tokens + 1;
-	const char *desc = NULL;
-	size_t len = 0;
+	char *help = "help: help [-dms] [pattern ...]\n";
 
-	if (*args)
-	{
-		info->status = EXIT_FAILURE;
-		while (*args)
-		{
-			bp = get_builtin(*args);
-			if (bp)
-			{
-				write(STDOUT_FILENO, bp->name, _strlen(bp->name));
-				write(STDOUT_FILENO, ": ", 2);
-				write(STDOUT_FILENO, bp->help, _strlen(bp->help));
-				write(STDOUT_FILENO, "\n", 1);
-				for (desc = bp->desc; (len = _strlen(desc)); desc += len + 1)
-				{
-					write(STDOUT_FILENO, "    ", 4);
-					write(STDOUT_FILENO, desc, len);
-					write(STDOUT_FILENO, "\n", 1);
-				}
-				info->status = EXIT_SUCCESS;
-			}
-			args += 1;
-		}
-		if (info->status == EXIT_FAILURE)
-			perrorl_default(*info->argv, info->lineno, "No topics match",
-					*info->tokens, *(args - 1), NULL);
-		return (info->status);
-	}
-	info->status = EXIT_SUCCESS;
-	for (bp = get_builtins(); bp->name; bp += 1)
-	{
-		write(STDOUT_FILENO, bp->help, _strlen(bp->help));
-		write(STDOUT_FILENO, "\n", 1);
-	}
-	return (info->status);
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "\tDisplay information about builtin commands.\n ";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "Displays brief summaries of builtin commands.\n";
+	write(STDOUT_FILENO, help, _strlen(help));
+}
+/**
+ * aux_help_alias - Help information for the builtin alias.
+ * Return: no return
+ */
+void aux_help_alias(void)
+{
+	char *help = "alias: alias [-p] [name[=value]...]\n";
+
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "\tDefine or display aliases.\n ";
+	write(STDOUT_FILENO, help, _strlen(help));
+}
+/**
+ * aux_help_cd - Help information for the builtin alias.
+ * Return: no return
+ */
+void aux_help_cd(void)
+{
+	char *help = "cd: cd [-L|[-P [-e]] [-@]] [dir]\n";
+
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "\tChange the shell working directory.\n ";
+	write(STDOUT_FILENO, help, _strlen(help));
 }
